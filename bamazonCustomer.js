@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: process.env.pwd,
+    password: "Padhai@32",//process.env.PW
     database: "bamazon_db"
 });
 
@@ -29,9 +29,9 @@ function start() {
     console.log("\n\t ------------Welcome to Bamazon Store-------------");
     showProducts();
 
-            
 
-    };
+
+};
 
 function showProducts() {
     connection.query("select* from products", function (err, res) {
@@ -51,30 +51,46 @@ function buyProducts() {
         {
             name: "chosenItem",
             type: "input",
-            message: " Please choose an item/product to buy ",
+            message: " Please choose an item number to buy ",
 
             validate: function (value) {
-                if (isNaN(value) === false && value!=="") {
+                if (isNaN(value) === false && value !== "") {
                     return true;
                 }
                 return false;
             }
         },
         {
-name:" cosenQuantity",
-type: "input",
-message: " Please enter the quantity to buy?",
+            name: " chosenQuantity",
+            type: "input",
+            message: " Please enter the quantity to buy?",
 
-validate: function (value) {
-    if (isNaN(value) === false && value!=="") {
-        return true;
-    }
-    return ("Please enter a number");
-}
+            validate: function (value) {
+                if (isNaN(value) === false && value !== "") {
+                    return true;
+                }
+                return ("Please enter a number");
+            }
         }
-    ]).then (function(answer){
+    ]).then(function (answer) {
+
+        connection.query(`SELECT * from products WHERE item_id = ${answer.chosenItem}`, function (err, res) {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                console.log("Your Product choice is : " + res[i].product_name);
+                console.log("We currently have a quantity of: " + res[i].stock_quantity);
+                if (res[i].stock_quantity < answer.chosenQuantity) {
+                    console.log("Sorry! There is not enough quantity of this product in the stock");
+                    nextPurchase();
+                } else {
+
+console.log("your order has been placed.")
+                }
 
 
+            }
+
+        })
 
     })
 };
