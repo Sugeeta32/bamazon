@@ -5,12 +5,13 @@ var inquirer = require("inquirer");
 require("dotenv").config();
 
 //cnnection to mysql
+// console.log(process.env.PW);
 
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "Padhai@32",//process.env.PW
+    password: process.env.PW,
     database: "bamazon_db"
 });
 
