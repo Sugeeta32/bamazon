@@ -13,21 +13,25 @@ Bamzon is a CL node app that takes in orders from customers and deplete stock fr
 1. Here you will be presented with a list of products in stock.
 
 
-**Screenshot of :** list of products
+**Screenshot of :**  List of products
+ 
  ![screenshot](https://github.com/Sugeeta32/bamazon/blob/master/images/Screenshot%20(32).png)
+
 
 4. The system `validates` if a user enters the correct item_id and also `validates` the availability of the product.
 
 **Screenshot of :** Validation
  ![screenshot]()
 
- 5. If  Quantity is suffecient,  the app will sucessfully process the transaction and display the output to the user. The stock quantity is also deducted and displayed to the user.
+ 
+ 5. If  Quantity is sufficient,  the app will sucessfully process the transaction and display the output to the user. The stock quantity is also deducted and displayed to the user.
 
 **Screenshot of :** Successfull order
  ![screenshot]()
 
 
- 6. If Quantity is insuffecient, the app will display the message and  the user is prompted if they want to buy another product
+
+6. If Quantity is insufficient, the app will display the message and  the user is prompted if they want to buy another product
 
 **Screenshot of :** Quantity-check
  ![screenshot]()
