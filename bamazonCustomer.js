@@ -52,48 +52,70 @@ function buyProducts() {
         {
             name: "chosenItem",
             type: "input",
-            message: " Please choose an item number to buy ",
+            message: " Please choose an Item ID to buy a product ",
 
             validate: function (value) {
-                if (isNaN(value) === false && value !== "") {
+                if (isNaN(value) === false) {
                     return true;
+                }else{
+                    return ("enter a valid id from the list");
                 }
-                return false;
+                
             }
         },
         {
-            name: " chosenQuantity",
+            name: "chosenQuantity",
             type: "input",
             message: " Please enter the quantity to buy?",
 
             validate: function (value) {
-                if (isNaN(value) === false && value !== "") {
+                if (isNaN(value) === false ) {
                     return true;
+                }else{
+                    return ("Please enter a number");
                 }
-                return ("Please enter a number");
+                
             }
         }
-    ]).then(function (answer) {
+    ])
+    .then(function (answer) {
 
         connection.query(`SELECT * from products WHERE item_id = ${answer.chosenItem}`, function (err, res) {
+            
             if (err) throw err;
-            for (var i = 0; i < res.length; i++) {
-                console.log("Your Product choice is : " + res[i].product_name);
-                console.log("We currently have a quantity of: " + res[i].stock_quantity);
-                if (res[i].stock_quantity < answer.chosenQuantity) {
+            
+             for (var i = 0; i < res.length; i++) {
+                
+               console.log("Your Product choice is : " + res[i].product_name);
+            console.log("We currently have a quantity of: " + res[i].stock_quantity);
+                if(res[i].stock_quantity < answer.chosenQuantity){
                     console.log("Sorry! There is not enough quantity of this product in the stock");
-                    nextPurchase();
-                } else {
-
-console.log("your order has been placed.")
+                     nextPurchase();
                 }
+            
+            else {
 
+                console.log("your order has been placed.");
+                //console.log("are you sure you want to buy"+ answer.chosenQuantity);
+                console.log("Your total purchase for " + answer.chosenQuantity +" "+ res[i].product_name + " "+"was: "+ res[i].price*answer.chosenQuantity);
+
+                var newQuantity=res[i].stock_quantity - answer.chosenQuantity;
+                console.log("we have now "+newQuantity +" "+"in stock");
+                connection.query("Update products SET stock_quantity = "+ newQuantity + "where item_id = "+res[i].item_id, function(err,res){
+                    if(err) throw err;
+                    console.log("Thanks for shopping!")
+                    nextPurchase();
+
+                })
 
             }
 
-        })
+         
+        }
 
-    })
+        });
+
+    });
 };
 
 
