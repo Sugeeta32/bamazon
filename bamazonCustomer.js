@@ -57,10 +57,10 @@ function buyProducts() {
             validate: function (value) {
                 if (isNaN(value) === false) {
                     return true;
-                }else{
+                } else {
                     return ("enter a valid id from the list");
                 }
-                
+
             }
         },
         {
@@ -69,98 +69,71 @@ function buyProducts() {
             message: " Please enter the quantity to buy?",
 
             validate: function (value) {
-                if (isNaN(value) === false ) {
+                if (isNaN(value) === false) {
                     return true;
-                }else{
+                } else {
                     return ("Please enter a number");
                 }
-                
+
             }
         }
     ])
-    .then(function (answer) {
+        .then(function (answer) {
 
-        connection.query(`SELECT * from products WHERE item_id = ${answer.chosenItem}`, function (err, res) {
-            
-            if (err) throw err;
-            
-             for (var i = 0; i < res.length; i++) {
-                
-               console.log("Your Product choice is : " + res[i].product_name);
-            console.log("We currently have a quantity of: " + res[i].stock_quantity);
-                if(res[i].stock_quantity < answer.chosenQuantity){
-                    console.log("Sorry! There is not enough quantity of this product in the stock");
-                     nextPurchase();
-                }
-            
-            else {
+            connection.query(`SELECT * from products WHERE item_id = ${answer.chosenItem}`, function (err, res) {
 
-                console.log("your order has been placed.");
-                //console.log("are you sure you want to buy"+ answer.chosenQuantity);
-                console.log("Your total purchase for " + answer.chosenQuantity +" "+ res[i].product_name + " "+"was: "+ res[i].price*answer.chosenQuantity);
+                if (err) throw err;
 
-                var newQuantity=res[i].stock_quantity - answer.chosenQuantity;
-                console.log("we have now "+newQuantity +" "+"in stock");
-                connection.query("Update products SET stock_quantity = "+ newQuantity + "where item_id = "+res[i].item_id, function(err,res){
-                    if(err) throw err;
-                    console.log("Thanks for shopping!")
-                    nextPurchase();
+                for (var i = 0; i < res.length; i++) {
 
-                })
+                    console.log("Your Product choice is : " + res[i].product_name);
+                    console.log("We currently have a quantity of: " + res[i].stock_quantity);
+                    if (res[i].stock_quantity < answer.chosenQuantity) {
+                        console.log("Sorry! There is not enough quantity of this product in the stock");
+                        nextPurchase();
+                    }
 
-            }
+                    else {
 
-         
-        }
+                        console.log("your order has been placed.");
+                        //console.log("are you sure you want to buy"+ answer.chosenQuantity);
+                        console.log("Your total purchase for " + answer.chosenQuantity + " " + res[i].product_name + " " + "was: " + res[i].price * answer.chosenQuantity);
+
+                        var newQuantity = res[i].stock_quantity - answer.chosenQuantity;
+                        console.log("we have now " + newQuantity + " " + "in stock");
+                        connection.query("Update products SET stock_quantity = " + newQuantity + "WHERE item_id = " + res[i].item_id, function (err, res) {
+                            // if (err) throw err;
+                            // console.log("Thanks for shopping!")
+                            nextPurchase();
+
+                        });
+
+                    };
+
+
+                };
+
+            });
 
         });
-
-    });
+};
+function nextPurchase() {
+    inquirer.prompt([
+        {
+            name: "continue",
+            type: "confirm",
+            message: "Would you like to buy another product?"
+        }
+    ])
+        .then(function (answer) {
+            if (answer.continue == true) {
+                console.log("Please choose another product");
+                showProducts();
+            } else {
+                console.log("Thanks for shopping");
+                connection.end();
+            }
+        });
 };
 
 
-//============================//
-// function postAuction() {
-//     // prompt for info about the item being put up for auction
-//     inquirer
-//       .prompt([
-//         {
-//           name: "item",
-//           type: "input",
-//           message: "What is the item you would like to submit?"
-//         },
-//         {
-//           name: "category",
-//           type: "input",
-//           message: "What category would you like to place your auction in?"
-//         },
-//         {
-//           name: "startingBid",
-//           type: "input",
-//           message: "What would you like your starting bid to be?",
-//           validate: function(value) {
-//             if (isNaN(value) === false) {
-//               return true;
-//             }
-//             return false;
-//           }
-//         }
-//       ])
-//       .then(function(answer) {
-//         // when finished prompting, insert a new item into the db with that info
-//         connection.query(
-//           "INSERT INTO auctions SET ?",
-//           {
-//             item_name: answer.item,
-//             category: answer.category,
-//             starting_bid: answer.startingBid || 0,
-//             highest_bid: answer.startingBid || 0
-//           },
-//           function(err) {
-//             if (err) throw err;
-//             console.log("Your auction was created successfully!");
-//             // re-prompt the user for if they want to bid or post
-//             start();
-//           }
-//         );
-//       });
