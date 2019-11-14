@@ -127,7 +127,7 @@ function nextPurchase() {
     ])
         .then(function (answer) {
             if (answer.continue == true) {
-                console.log("Please choose another product");
+                console.log("\n" +"Please choose another product"+"\n");
                 showProducts();
             } else {
                 console.log("Thanks for shopping");
