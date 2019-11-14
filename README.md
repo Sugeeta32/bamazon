@@ -33,7 +33,7 @@ Bamzon is a CL node app that takes in orders from customers and deplete stock fr
 6. If Quantity is insufficient, the app will display the message and  the user is prompted if they want to buy another product
 
 **Screenshot of :** Quantity-check
- ![screenshot]()
+ ![screenshot](https://github.com/Sugeeta32/bamazon/blob/master/images/Screenshot%20(41).png)
  
 
 7. If the user chooses to continue shopping, then a list of products is displayed again else the app stops.
